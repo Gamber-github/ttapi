@@ -11,6 +11,10 @@
     "rootDir": ".",
     "paths": {}
   },
-  "include": ["playwright.config.ts", "tests/**/*.ts", "tests/global-setup.ts"],
+  "include": [
+    "playwright.config.ts",
+    "e2e/tests/**/*.ts",
+    "e2e/helpers/global-setup.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

@@ -7,7 +7,7 @@ import {
   TenantName,
   UI_BASE_URL,
   USERS,
-} from '../playwright.config';
+} from '../../playwright.config';
 
 async function fetchToken(username: string, password: string) {
   const body = new URLSearchParams({
