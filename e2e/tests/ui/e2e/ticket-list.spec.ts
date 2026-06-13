@@ -6,7 +6,7 @@ test.describe('Ticket List', () => {
     //ARRANGE
     const ticketListPage = new TicketsPage(page);
     //ACT
-    await page.goto('/');
+    await ticketListPage.goTo();
     //ASSERT
     await expect(ticketListPage.table).toBeVisible();
   });
@@ -19,7 +19,7 @@ test.describe('Ticket List', () => {
       tenantId: 100001,
     };
     //ACT
-    await page.goto('/');
+    await ticketListPage.goTo();
     await ticketListPage.OpenTicketDetails(
       testTicket.externalId,
       testTicket.tenantId,

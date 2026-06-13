@@ -25,6 +25,10 @@ export class TicketsPage extends BasePage {
     };
   }
 
+  async goTo() {
+    await this.page.goto('/');
+  }
+
   async CreateNewTicket() {
     await this.newTicketButton.click();
   }
