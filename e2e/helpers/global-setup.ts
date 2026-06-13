@@ -1,3 +1,4 @@
+import { chromium } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 import {
@@ -35,35 +36,45 @@ async function fetchToken(username: string, password: string) {
   return json.access_token;
 }
 
-function writeStorageState(tenant: TenantName, token: string) {
-  const filePath = authStatePath(tenant);
-
-  const storageState = {
-    cookies: [],
-    origins: [
-      {
-        origin: UI_BASE_URL,
-        localStorage: [{ name: 'access_token', value: token }],
-      },
-    ],
-    __ttapi_access_token: token,
-  };
-
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, JSON.stringify(storageState));
-  console.log(`Saved token for ${tenant}`);
-}
-
 export default async function globalSetup() {
-  console.log('Starting global setup: fetching tokens...');
+  console.log(
+    'Starting global setup: fetching tokens and capturing Keycloak cookies...',
+  );
 
+  const browser = await chromium.launch({ headless: true });
   const tenants = Object.keys(USERS) as TenantName[];
 
   for (const tenant of tenants) {
     const user = USERS[tenant];
     const token = await fetchToken(user.username, user.password);
-    writeStorageState(tenant, token);
+    const context = await browser.newContext();
+    const page = await context.newPage();
+
+    try {
+      console.log(`Capturing browser session for tenant: ${tenant}...`);
+      await page.goto(UI_BASE_URL);
+      await page.locator('#username').fill(user.username);
+      await page.locator('#password').fill(user.password);
+      await page.locator('#kc-login').click();
+      await page.waitForURL(`${UI_BASE_URL}/**`);
+
+      const storageState = await context.storageState();
+      const finalState = {
+        ...storageState,
+        __ttapi_access_token: token,
+      };
+
+      const filePath = authStatePath(tenant);
+      fs.mkdirSync(path.dirname(filePath), { recursive: true });
+      fs.writeFileSync(filePath, JSON.stringify(finalState));
+      console.log(` Saved combined auth state for [${tenant}]`);
+    } catch (error) {
+      console.error(`❌ Failed to capture UI session for ${tenant}:`, error);
+    } finally {
+      await context.close();
+    }
   }
 
-  console.log('Global setup finished.');
+  await browser.close();
+  console.log('Global setup finished successfully.');
 }

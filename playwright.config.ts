@@ -17,21 +17,22 @@ export const USERS = {
 export type TenantName = 'alpha' | 'beta' | 'gamma';
 
 export const AUTH_STATE_DIR = '.auth';
-export const authStatePath = (tenant: TenantName) => `${AUTH_STATE_DIR}/${tenant}.json`;
+export const authStatePath = (tenant: TenantName) =>
+  `${AUTH_STATE_DIR}/${tenant}.json`;
 
 export const VALID_SERVICE_ID_MIN = 100001;
 export const VALID_SERVICE_ID_MAX = 100030;
 
 export default defineConfig({
-  testDir: './tests',
+  testDir: './e2e/tests',
   workers: 1,
   fullyParallel: false,
   retries: process.env.CI ? 2 : 0,
-  globalSetup: './tests/global-setup.ts',
+  globalSetup: 'e2e/helpers/global-setup.ts',
 
   reporter: [
     ['list'],
-    ['html', { open: 'never', outputFolder: 'playwright-report' }]
+    ['html', { open: 'never', outputFolder: 'playwright-report' }],
   ],
 
   use: {
