@@ -13,6 +13,7 @@ export class NewTicketPage extends BasePage {
 
   readonly externalIdInput: Locator;
   readonly serviceIDInput: Locator;
+  readonly validDerviceIDs: number[] = [100030];
   readonly descriptionTextArea: Locator;
   readonly noteTextArea: Locator;
   readonly submitButton: Locator;
@@ -46,7 +47,8 @@ export class NewTicketPage extends BasePage {
   }
 
   generateValidServiceId(): number {
-    return Math.floor(100001 + Math.random() * 30);
+    const randomIndex = Math.floor(Math.random() * this.validDerviceIDs.length);
+    return this.validDerviceIDs[randomIndex];
   }
 
   async createTicket(data: NewTicketData): Promise<NewTicketData> {
