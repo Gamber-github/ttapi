@@ -1,5 +1,5 @@
-import { Locator, Page } from '@playwright/test';
-import BasePage from './basePage';
+import { Locator, Page } from "@playwright/test";
+import BasePage from "./basePage";
 
 export interface NewTicketData {
   externalId?: string;
@@ -22,26 +22,26 @@ export class NewTicketPage extends BasePage {
     super(page);
     this.page = page;
 
-    this.externalIdInput = this.page.getByRole('textbox', {
-      name: 'ID zewnętrzny',
+    this.externalIdInput = this.page.getByRole("textbox", {
+      name: "ID zewnętrzny",
     });
-    this.serviceIDInput = this.page.getByRole('spinbutton', {
-      name: 'ID usługi',
+    this.serviceIDInput = this.page.getByRole("spinbutton", {
+      name: "ID usługi",
     });
-    this.descriptionTextArea = this.page.getByRole('textbox', { name: 'Opis' });
-    this.noteTextArea = this.page.getByRole('textbox', {
-      name: 'Notatka inicjalna (opcjonalna)',
+    this.descriptionTextArea = this.page.getByRole("textbox", { name: "Opis" });
+    this.noteTextArea = this.page.getByRole("textbox", {
+      name: "Notatka inicjalna (opcjonalna)",
     });
-    this.submitButton = this.page.getByRole('button', {
-      name: 'Utwórz zgłoszenie',
+    this.submitButton = this.page.getByRole("button", {
+      name: "Utwórz zgłoszenie",
     });
   }
 
   async goTo() {
-    await this.page.goto('/tickets/new');
+    await this.page.goto("/tickets/new");
   }
 
-  generateExternalId(prefix: string = 'TT-2026-'): string {
+  generateExternalId(prefix: string = "TT-2026-"): string {
     const randomNumber = Math.floor(1000 + Math.random() * 9000);
     return `${prefix}${randomNumber}`;
   }
@@ -52,10 +52,9 @@ export class NewTicketPage extends BasePage {
   }
 
   async createTicket(data: NewTicketData): Promise<NewTicketData> {
-    const prefix = data.externalId ?? 'TT-2026-';
+    const prefix = data.externalId ?? "TT-2026-";
     const generatedId = this.generateExternalId(prefix);
     const targetServiceId = data.serviceId ?? this.generateValidServiceId();
-
     await this.externalIdInput.fill(generatedId);
     await this.serviceIDInput.fill(targetServiceId.toString());
     await this.descriptionTextArea.fill(data.description);

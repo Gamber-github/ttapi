@@ -1,3 +1,4 @@
 export enum TicketStatus {
-  acknowledged = 'Przyjęte',
+  acknowledged = "Przyjęte",
+  rejected = "Odrzucone",
 }
