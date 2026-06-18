@@ -25,8 +25,8 @@ export const VALID_SERVICE_ID_MAX = 100030;
 
 export default defineConfig({
   testDir: './e2e/tests',
-  workers: 1,
-  fullyParallel: false,
+  workers: process.env.CI ? 2 : 4,
+  fullyParallel: true,
   retries: process.env.CI ? 2 : 0,
   globalSetup: 'e2e/helpers/global-setup.ts',
 

@@ -6,22 +6,21 @@ export class TicketsPage extends BasePage {
 
   readonly newTicketButton: Locator;
   readonly table: Locator;
-  readonly getTicketRow: (externalId: string, tenantId: number) => Locator;
+  readonly getTicketRow: (externalId: string, serviceId: number) => Locator;
 
   constructor(page: Page) {
     super(page);
     this.page = page;
 
-    // Define selectors for elements on the ticket list page
     this.newTicketButton = this.page.getByRole('button', {
       name: 'Nowe Zgłoszenie',
     });
     this.table = this.page.getByRole('table');
-    this.getTicketRow = (externalId: string, tenantId: number) => {
+    this.getTicketRow = (externalId: string, serviceId: number) => {
       return this.page
         .getByRole('row')
         .filter({ hasText: externalId })
-        .filter({ hasText: tenantId.toString() });
+        .filter({ hasText: serviceId.toString() });
     };
   }
 
@@ -29,12 +28,12 @@ export class TicketsPage extends BasePage {
     await this.page.goto('/');
   }
 
-  async CreateNewTicket() {
+  async createNewTicket() {
     await this.newTicketButton.click();
   }
 
-  async OpenTicketDetails(externalId: string, tenantId: number) {
-    const ticketRow = this.getTicketRow(externalId, tenantId);
+  async openTicketDetails(externalId: string, serviceId: number) {
+    const ticketRow = this.getTicketRow(externalId, serviceId);
     await ticketRow.click();
   }
 }

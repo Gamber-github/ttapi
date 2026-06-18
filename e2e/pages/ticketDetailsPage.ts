@@ -1,5 +1,5 @@
-import { Page, Locator } from '@playwright/test';
-import BasePage from './basePage';
+import { expect, Page, Locator } from "@playwright/test";
+import BasePage from "./basePage";
 
 export class TicketDetailsPage extends BasePage {
   readonly page: Page;
@@ -7,32 +7,38 @@ export class TicketDetailsPage extends BasePage {
   readonly externalId: Locator;
   readonly serviceId: Locator;
   readonly description: Locator;
+  readonly closeButton: Locator;
   readonly notesSection: Locator;
   readonly noteItems: Locator;
-  readonly statusContainer: Locator;
+  readonly noteInput: Locator;
+  readonly saveNoteButton: Locator;
 
   constructor(page: Page) {
     super(page);
     this.page = page;
 
-    this.externalId = this.page.getByRole('heading', {
+    this.externalId = this.page.getByRole("heading", {
       level: 5,
-      name: /TT-\d{4}-\d{4}/,
+      name: /[A-Z]+-\d{4}-\d{4}/,
     });
 
     this.serviceId = page.locator('span:text-is("ID usługi") + p');
     this.description = page.locator('span:text-is("Opis") + p');
 
-    this.notesSection = this.page.locator('div').filter({
-      has: this.page.getByRole('heading', { name: /^Notatki/ }),
+    this.closeButton = page.getByRole("button", {
+      name: "Zamknij zgłoszenie",
     });
-    this.noteItems = this.notesSection.getByRole('listitem');
 
-    this.statusContainer = page.locator('.status-section-classname');
+    this.notesSection = this.page.locator("div").filter({
+      has: this.page.getByRole("heading", { name: /^Notatki/ }),
+    });
+    this.noteItems = this.notesSection.getByRole("listitem");
+    this.noteInput = page.getByRole("textbox", { name: "Treść Notatki" });
+    this.saveNoteButton = page.getByRole("button", { name: "Dodaj Notatkę" });
   }
 
   async goTo(externalId: string) {
-    await this.page.goto('/tickets/' + externalId);
+    await this.page.goto("/tickets/" + externalId);
   }
 
   async getExternalID(): Promise<string> {
@@ -49,12 +55,20 @@ export class TicketDetailsPage extends BasePage {
   }
 
   async getStatus(expectedStatus: string): Promise<Locator> {
-    return this.page
-      .locator('.MuiChip-root')
-      .filter({ hasText: expectedStatus });
+    return this.page.locator(".MuiChip-root").filter({ hasText: expectedStatus });
   }
 
   async getSpecificNote(expectedNoteText: string): Promise<Locator> {
     return this.noteItems.filter({ hasText: expectedNoteText });
+  }
+
+  async closeTicket() {
+    await this.closeButton.click();
+  }
+
+  async saveGivenNote(note: string) {
+    await this.noteInput.fill(note);
+    await this.saveNoteButton.click();
+    await expect(this.noteItems.filter({ hasText: note })).toBeVisible();
   }
 }

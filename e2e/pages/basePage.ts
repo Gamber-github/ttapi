@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator, Page } from "@playwright/test";
 
 export default class BasePage {
   readonly page: Page;
@@ -9,9 +9,9 @@ export default class BasePage {
   constructor(page: Page) {
     this.page = page;
 
-    this.logoutButton = this.page.getByRole('button', { name: 'Wyloguj' });
-    this.goBackButton = this.page.getByRole('button', {
-      name: 'Powrót Do listy',
+    this.logoutButton = this.page.getByRole("button", { name: "Wyloguj" });
+    this.goBackButton = this.page.getByRole("button", {
+      name: "Powrót Do listy",
     });
   }
 
@@ -19,7 +19,7 @@ export default class BasePage {
     await this.logoutButton.click();
   }
 
-  async GoBackToList() {
+  async goBackToList() {
     await this.goBackButton.click();
   }
 }
