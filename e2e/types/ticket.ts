@@ -25,3 +25,23 @@ export enum ApiErrorCode {
   forbidden = "FORBIDDEN",
   internalError = "INTERNAL_ERROR",
 }
+
+export interface ApiTicketNote {
+  id: string;
+  text: string;
+  date: string;
+}
+
+export interface ApiTicketResponse {
+  externalId: string;
+  serviceId: number;
+  description?: string;
+  status: ApiTicketStatus;
+  notes?: ApiTicketNote[];
+}
+
+export interface ApiErrorResponse {
+  code: ApiErrorCode;
+  message: string;
+  requestId?: string;
+}
