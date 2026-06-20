@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { NewTicketPage } from "../../../pages/createTicketPage";
-import { TicketsPage } from "../../../pages/ticketsPage";
-import { TicketStatus } from "../../../types/ticket";
+import { NewTicketPage } from "../../pages/createTicketPage";
+import { TicketsPage } from "../../pages/ticketsPage";
+import { TicketStatus } from "../../types/ticket";
 
 // ParityTicketStatusResolver: even serviceId → acknowledged
 const EVEN_SERVICE_ID = 100002;

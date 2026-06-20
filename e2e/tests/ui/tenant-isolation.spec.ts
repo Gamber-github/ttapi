@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { NewTicketPage } from "../../../pages/createTicketPage";
-import { TicketsPage } from "../../../pages/ticketsPage";
-import { authStatePath } from "../../../../playwright.config";
+import { NewTicketPage } from "../../pages/createTicketPage";
+import { TicketsPage } from "../../pages/ticketsPage";
+import { authStatePath } from "../../../playwright.config";
 
 test.describe("Tenant isolation", () => {
   test("Ticket created by beta user is not visible to gamma user", async ({ browser }) => {

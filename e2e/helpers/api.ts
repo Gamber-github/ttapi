@@ -1,5 +1,5 @@
 import { APIRequestContext } from '@playwright/test';
-import { API_BASE_URL, VALID_SERVICE_ID_MIN } from '../../playwright.config';
+import { API_BASE_URL, VALID_SERVICE_ID_MIN, VALID_SERVICE_ID_MAX } from '../../playwright.config';
 import { bearerHeader } from './auth';
 import type { TenantName } from '../../playwright.config';
 
@@ -71,10 +71,12 @@ export function createApiClient(
   };
 }
 
-export function uniqueExternalId(prefix = 'OK'): string {
-  return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+export function uniqueExternalId(prefix = 'API-2026'): string {
+  return `${prefix}-${Math.floor(1000 + Math.random() * 9000)}`;
 }
 
 export function validServiceId(): number {
-  return VALID_SERVICE_ID_MIN;
+  const min = VALID_SERVICE_ID_MIN % 2 === 0 ? VALID_SERVICE_ID_MIN : VALID_SERVICE_ID_MIN + 1;
+  const evenCount = Math.floor((VALID_SERVICE_ID_MAX - min) / 2) + 1;
+  return min + Math.floor(Math.random() * evenCount) * 2;
 }

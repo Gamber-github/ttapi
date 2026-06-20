@@ -1,8 +1,8 @@
 import { test, expect } from "@playwright/test";
-import { NewTicketData, NewTicketPage } from "../../../pages/createTicketPage";
-import { TicketsPage } from "../../../pages/ticketsPage";
-import { TicketDetailsPage } from "../../../pages/ticketDetailsPage";
-import { TicketStatus } from "../../../types/ticket";
+import { NewTicketData, NewTicketPage } from "../../pages/createTicketPage";
+import { TicketsPage } from "../../pages/ticketsPage";
+import { TicketDetailsPage } from "../../pages/ticketDetailsPage";
+import { TicketStatus } from "../../types/ticket";
 
 test.describe("Ticket creation process", () => {
   test("Full verification of ticket creation process", async ({ page }) => {

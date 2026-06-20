@@ -6,3 +6,12 @@ export enum TicketStatus {
   closed = "Zamknięte",
   rejected = "Odrzucone",
 }
+
+export enum ApiTicketStatus {
+  new = "new",
+  acknowledged = "acknowledged",
+  inProgress = "inProgress",
+  resolved = "resolved",
+  closed = "closed",
+  rejected = "rejected",
+}

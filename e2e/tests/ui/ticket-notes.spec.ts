@@ -1,8 +1,8 @@
 import { test, expect } from "@playwright/test";
-import { NewTicketPage } from "../../../pages/createTicketPage";
-import { TicketDetailsPage } from "../../../pages/ticketDetailsPage";
-import { TicketStatus } from "../../../types/ticket";
-import { TicketsPage } from "../../../pages/ticketsPage";
+import { NewTicketPage } from "../../pages/createTicketPage";
+import { TicketDetailsPage } from "../../pages/ticketDetailsPage";
+import { TicketStatus } from "../../types/ticket";
+import { TicketsPage } from "../../pages/ticketsPage";
 
 // ParityTicketStatusResolver: even serviceId → acknowledged, odd serviceId → rejected
 const EVEN_SERVICE_ID = 100002;
