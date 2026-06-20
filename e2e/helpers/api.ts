@@ -80,3 +80,9 @@ export function validServiceId(): number {
   const evenCount = Math.floor((VALID_SERVICE_ID_MAX - min) / 2) + 1;
   return min + Math.floor(Math.random() * evenCount) * 2;
 }
+
+export function rejectedServiceId(): number {
+  const min = VALID_SERVICE_ID_MIN % 2 !== 0 ? VALID_SERVICE_ID_MIN : VALID_SERVICE_ID_MIN + 1;
+  const oddCount = Math.floor((VALID_SERVICE_ID_MAX - min) / 2) + 1;
+  return min + Math.floor(Math.random() * oddCount) * 2;
+}
