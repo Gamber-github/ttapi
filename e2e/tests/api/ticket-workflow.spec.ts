@@ -102,4 +102,46 @@ test.describe("Ticket workflow", () => {
     // Act & Assert
     await assertIdempotentCreation(api, uniqueExternalId(), serviceId, serviceId);
   });
+
+  test("should return 400 with STATUS_TRANSITION_ERROR when closing a rejected ticket", async () => {
+    // Arrange
+    const createResponse = await api.createTicket({
+      externalId: uniqueExternalId(),
+      serviceId: rejectedServiceId(),
+      description: "Ticket for status transition error test",
+      status: ApiTicketStatus.new,
+    });
+    const body = (await createResponse.json()) as ApiTicketResponse;
+
+    // Act
+    const patchTicketResponse = await api.patchTicket(body.externalId, {
+      status: ApiTicketStatus.closed,
+    });
+    const patchTicketBody = (await patchTicketResponse.json()) as ApiErrorResponse;
+
+    // Assert
+    expect(patchTicketResponse.status()).toBe(400);
+    expect(patchTicketBody.code).toBe(ApiErrorCode.statusTransitionError);
+  });
+
+  test("should return 400 with VALIDATION_ERROR when patching ticket to inProgress", async () => {
+    // Arrange
+    const createResponse = await api.createTicket({
+      externalId: uniqueExternalId(),
+      serviceId: validServiceId(),
+      description: "Ticket for patch validation test",
+      status: ApiTicketStatus.new,
+    });
+    const body = (await createResponse.json()) as ApiTicketResponse;
+
+    // Act
+    const patchResponse = await api.patchTicket(body.externalId, {
+      status: ApiTicketStatus.inProgress,
+    });
+    const patchBody = (await patchResponse.json()) as ApiErrorResponse;
+
+    // Assert
+    expect(patchResponse.status()).toBe(400);
+    expect(patchBody.code).toBe(ApiErrorCode.validationError);
+  });
 });

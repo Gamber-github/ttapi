@@ -1,26 +1,19 @@
-import { chromium } from '@playwright/test';
-import fs from 'fs';
-import path from 'path';
-import {
-  authStatePath,
-  KC_CLIENT_ID,
-  KC_TOKEN_URL,
-  TenantName,
-  UI_BASE_URL,
-  USERS,
-} from '../../playwright.config';
+import { chromium } from "@playwright/test";
+import fs from "fs";
+import path from "path";
+import { authStatePath, KC_CLIENT_ID, KC_TOKEN_URL, TenantName, UI_BASE_URL, USERS } from "../../playwright.config";
 
 async function fetchToken(username: string, password: string) {
   const body = new URLSearchParams({
-    grant_type: 'password',
+    grant_type: "password",
     client_id: KC_CLIENT_ID,
     username,
     password,
   });
 
   const res = await fetch(KC_TOKEN_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: body.toString(),
   });
 
@@ -37,9 +30,7 @@ async function fetchToken(username: string, password: string) {
 }
 
 export default async function globalSetup() {
-  console.log(
-    'Starting global setup: fetching tokens and capturing Keycloak cookies...',
-  );
+  console.log("Starting global setup: fetching tokens and capturing Keycloak cookies...");
 
   const browser = await chromium.launch({ headless: true });
   const tenants = Object.keys(USERS) as TenantName[];
@@ -53,9 +44,9 @@ export default async function globalSetup() {
     try {
       console.log(`Capturing browser session for tenant: ${tenant}...`);
       await page.goto(UI_BASE_URL);
-      await page.locator('#username').fill(user.username);
-      await page.locator('#password').fill(user.password);
-      await page.locator('#kc-login').click();
+      await page.locator("#username").fill(user.username);
+      await page.locator("#password").fill(user.password);
+      await page.locator("#kc-login").click();
       await page.waitForURL(`${UI_BASE_URL}/**`);
 
       const storageState = await context.storageState();
@@ -69,12 +60,12 @@ export default async function globalSetup() {
       fs.writeFileSync(filePath, JSON.stringify(finalState));
       console.log(` Saved combined auth state for [${tenant}]`);
     } catch (error) {
-      console.error(`❌ Failed to capture UI session for ${tenant}:`, error);
+      console.error(`Failed to capture UI session for ${tenant}:`, error);
     } finally {
       await context.close();
     }
   }
 
   await browser.close();
-  console.log('Global setup finished successfully.');
+  console.log("Global setup finished successfully.");
 }
