@@ -28,19 +28,19 @@ export function createApiClient(
   const defaultHeaders = bearerHeader(tenant);
 
   return {
-    async listTickets(headers?: any) {
+    async listTickets(headers?: Record<string, string>) {
       return request.get(`${API_BASE_URL}/api/v1/troubleTicket`, {
         headers: { ...defaultHeaders, ...headers },
       });
     },
 
-    async getTicket(id: string | number, headers?: any) {
+    async getTicket(id: string | number, headers?: Record<string, string>) {
       return request.get(`${API_BASE_URL}/api/v1/troubleTicket/${id}`, {
         headers: { ...defaultHeaders, ...headers },
       });
     },
 
-    async createTicket(payload: CreateTicketPayload, headers?: any) {
+    async createTicket(payload: CreateTicketPayload, headers?: Record<string, string>) {
       return request.post(`${API_BASE_URL}/api/v1/troubleTicket`, {
         headers: { ...defaultHeaders, ...headers },
         data: payload,
@@ -50,7 +50,7 @@ export function createApiClient(
     async patchTicket(
       id: string | number,
       payload: PatchTicketPayload,
-      headers?: any,
+      headers?: Record<string, string>,
     ) {
       return request.patch(`${API_BASE_URL}/api/v1/troubleTicket/${id}`, {
         headers: { ...defaultHeaders, ...headers },
@@ -61,7 +61,7 @@ export function createApiClient(
     async addNote(
       ticketId: string | number,
       payload: AddNotePayload,
-      headers?: any,
+      headers?: Record<string, string>,
     ) {
       return request.post(
         `${API_BASE_URL}/api/v1/troubleTicket/${ticketId}/note`,

@@ -3,6 +3,7 @@ import { NewTicketData, NewTicketPage } from "../../pages/createTicketPage";
 import { TicketsPage } from "../../pages/ticketsPage";
 import { TicketDetailsPage } from "../../pages/ticketDetailsPage";
 import { TicketStatus } from "../../types/ticket";
+import { rejectedServiceId } from "../../helpers/api";
 
 test.describe("Ticket creation process", () => {
   test("Full verification of ticket creation process", async ({ page }) => {
@@ -90,7 +91,7 @@ test.describe("Ticket creation validation", () => {
     // ACT
     await newTicket.goTo();
     const createdTicket = await newTicket.createTicket({
-      serviceId: 999999,
+      serviceId: rejectedServiceId(),
       description: "Test description for rejected ticket",
     });
 
