@@ -2,8 +2,6 @@ import { expect, Page, Locator } from "@playwright/test";
 import BasePage from "./basePage";
 
 export class TicketDetailsPage extends BasePage {
-  readonly page: Page;
-
   readonly externalId: Locator;
   readonly serviceId: Locator;
   readonly description: Locator;
@@ -15,9 +13,8 @@ export class TicketDetailsPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.page = page;
 
-    this.externalId = this.page.getByRole("heading", {
+    this.externalId = page.getByRole("heading", {
       level: 5,
       name: /[A-Z]+-\d{4}-\d{4}/,
     });
@@ -29,7 +26,7 @@ export class TicketDetailsPage extends BasePage {
       name: "Zamknij zgłoszenie",
     });
 
-    this.notesSection = this.page.locator("div").filter({
+    this.notesSection = page.locator("div").filter({
       has: this.page.getByRole("heading", { name: /^Notatki/ }),
     });
     this.noteItems = this.notesSection.getByRole("listitem");

@@ -10,8 +10,6 @@ export interface NewTicketData {
 }
 
 export class NewTicketPage extends BasePage {
-  readonly page: Page;
-
   readonly externalIdInput: Locator;
   readonly serviceIDInput: Locator;
   readonly descriptionTextArea: Locator;
@@ -20,19 +18,18 @@ export class NewTicketPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.page = page;
 
-    this.externalIdInput = this.page.getByRole("textbox", {
+    this.externalIdInput = page.getByRole("textbox", {
       name: "ID zewnętrzny",
     });
-    this.serviceIDInput = this.page.getByRole("spinbutton", {
+    this.serviceIDInput = page.getByRole("spinbutton", {
       name: "ID usługi",
     });
-    this.descriptionTextArea = this.page.getByRole("textbox", { name: "Opis" });
-    this.initialNoteTextArea = this.page.getByRole("textbox", {
+    this.descriptionTextArea = page.getByRole("textbox", { name: "Opis" });
+    this.initialNoteTextArea = page.getByRole("textbox", {
       name: "Notatka inicjalna (opcjonalna)",
     });
-    this.submitButton = this.page.getByRole("button", {
+    this.submitButton = page.getByRole("button", {
       name: "Utwórz zgłoszenie",
     });
   }

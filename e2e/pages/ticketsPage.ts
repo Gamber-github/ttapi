@@ -1,31 +1,25 @@
-import { Locator, Page } from '@playwright/test';
-import BasePage from './basePage';
+import { Locator, Page } from "@playwright/test";
+import BasePage from "./basePage";
 
 export class TicketsPage extends BasePage {
-  readonly page: Page;
-
   readonly newTicketButton: Locator;
   readonly table: Locator;
   readonly getTicketRow: (externalId: string, serviceId: number) => Locator;
 
   constructor(page: Page) {
     super(page);
-    this.page = page;
 
-    this.newTicketButton = this.page.getByRole('button', {
-      name: 'Nowe Zgłoszenie',
+    this.newTicketButton = page.getByRole("button", {
+      name: "Nowe Zgłoszenie",
     });
-    this.table = this.page.getByRole('table');
+    this.table = page.getByRole("table");
     this.getTicketRow = (externalId: string, serviceId: number) => {
-      return this.page
-        .getByRole('row')
-        .filter({ hasText: externalId })
-        .filter({ hasText: serviceId.toString() });
+      return page.getByRole("row").filter({ hasText: externalId }).filter({ hasText: serviceId.toString() });
     };
   }
 
   async goTo() {
-    await this.page.goto('/');
+    await this.page.goto("/");
   }
 
   async createNewTicket() {
