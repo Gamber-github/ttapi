@@ -25,8 +25,7 @@ test.describe("Notes on active tickets", () => {
     await ticketDetailsPage.saveGivenNote(noteText);
 
     // ASSERT
-    const noteLocator = await ticketDetailsPage.getSpecificNote(noteText);
-    await expect(noteLocator).toBeVisible();
+    await expect(ticketDetailsPage.getSpecificNote(noteText)).toBeVisible();
   });
 
   test("Multiple notes can be added sequentially to an acknowledged ticket", async ({
@@ -47,11 +46,12 @@ test.describe("Notes on active tickets", () => {
     // ACT
     await ticketDetailsPage.goTo(createdTicket.externalId!);
     await ticketDetailsPage.saveGivenNote(firstNote);
+    await expect(ticketDetailsPage.getSpecificNote(firstNote)).toBeVisible();
     await ticketDetailsPage.saveGivenNote(secondNote);
 
     // ASSERT
-    await expect(await ticketDetailsPage.getSpecificNote(firstNote)).toBeVisible();
-    await expect(await ticketDetailsPage.getSpecificNote(secondNote)).toBeVisible();
+    await expect(ticketDetailsPage.getSpecificNote(firstNote)).toBeVisible();
+    await expect(ticketDetailsPage.getSpecificNote(secondNote)).toBeVisible();
   });
 
 });
@@ -118,7 +118,8 @@ test.describe("Notes blocked on inactive tickets", () => {
     // ACT
     await resolvedRow.click();
     await page.waitForURL("**/tickets/**");
-    await expect(ticketDetailsPage.externalId).toBeVisible();
+    const ticketId = page.url().split("/").pop()!;
+    await expect(ticketDetailsPage.externalIdHeading(ticketId)).toBeVisible();
 
     // ASSERT
     await expect(await ticketDetailsPage.getStatus(TicketStatus.resolved)).toBeVisible();

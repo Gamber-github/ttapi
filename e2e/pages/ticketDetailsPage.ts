@@ -1,8 +1,7 @@
-import { expect, Page, Locator } from "@playwright/test";
+import { Page, Locator } from "@playwright/test";
 import BasePage from "./basePage";
 
 export class TicketDetailsPage extends BasePage {
-  readonly externalId: Locator;
   readonly serviceId: Locator;
   readonly description: Locator;
   readonly closeButton: Locator;
@@ -13,11 +12,6 @@ export class TicketDetailsPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-
-    this.externalId = page.getByRole("heading", {
-      level: 5,
-      name: /[A-Z]+-\d{4}-\d{4}/,
-    });
 
     this.serviceId = page.locator('span:text-is("ID usługi") + p');
     this.description = page.locator('span:text-is("Opis") + p');
@@ -38,8 +32,14 @@ export class TicketDetailsPage extends BasePage {
     await this.page.goto("/tickets/" + externalId);
   }
 
+  externalIdHeading(id?: string): Locator {
+    return id
+      ? this.page.getByRole("heading", { level: 5, name: id })
+      : this.page.getByRole("heading", { level: 5, name: /[A-Z]+-\d{4}-\d{4}/ });
+  }
+
   async getExternalID(): Promise<string> {
-    return await this.externalId.innerText();
+    return await this.externalIdHeading().innerText();
   }
 
   async getServiceID(): Promise<number> {
@@ -51,11 +51,11 @@ export class TicketDetailsPage extends BasePage {
     return await this.description.innerText();
   }
 
-  async getStatus(expectedStatus: string): Promise<Locator> {
+  getStatus(expectedStatus: string) {
     return this.page.getByText(expectedStatus, { exact: true });
   }
 
-  async getSpecificNote(expectedNoteText: string): Promise<Locator> {
+  getSpecificNote(expectedNoteText: string) {
     return this.noteItems.filter({ hasText: expectedNoteText });
   }
 
@@ -66,6 +66,5 @@ export class TicketDetailsPage extends BasePage {
   async saveGivenNote(note: string) {
     await this.noteInput.fill(note);
     await this.saveNoteButton.click();
-    await expect(this.noteItems.filter({ hasText: note })).toBeVisible();
   }
 }

@@ -23,7 +23,7 @@ test.describe("Ticket creation process", () => {
       await newTicketPage.goTo();
       createdTicketData = await newTicketPage.createTicket(ticketData);
       // ASSERT
-      await expect(ticketDetailsPage.externalId).toBeVisible();
+      await expect(ticketDetailsPage.externalIdHeading(createdTicketData.externalId!)).toBeVisible();
     });
 
     await test.step("Should display correct ticket data and accept an initial note", async () => {
@@ -64,7 +64,7 @@ test.describe("Ticket creation idempotency", () => {
     // ACT — first submission creates the ticket
     await newTicketPage.goTo();
     const firstResult = await newTicketPage.createTicket(ticketData);
-    await expect(ticketDetailsPage.externalId).toBeVisible();
+    await expect(ticketDetailsPage.externalIdHeading(firstResult.externalId!)).toBeVisible();
     const firstDescription = await ticketDetailsPage.getDescription();
 
     // ACT — second submission with the same externalId but different description
@@ -75,7 +75,7 @@ test.describe("Ticket creation idempotency", () => {
     });
 
     // ASSERT — lands on the same ticket with the original description (existing resource returned)
-    await expect(ticketDetailsPage.externalId).toBeVisible();
+    await expect(ticketDetailsPage.externalIdHeading(firstResult.externalId!)).toBeVisible();
     expect(await ticketDetailsPage.getExternalID()).toBe(firstResult.externalId);
     expect(await ticketDetailsPage.getDescription()).toBe(firstDescription);
   });
@@ -89,13 +89,13 @@ test.describe("Ticket creation validation", () => {
 
     // ACT
     await newTicket.goTo();
-    await newTicket.createTicket({
+    const createdTicket = await newTicket.createTicket({
       serviceId: 999999,
       description: "Test description for rejected ticket",
     });
 
     // ASSERT
-    await expect(ticketDetails.externalId).toBeVisible();
+    await expect(ticketDetails.externalIdHeading(createdTicket.externalId!)).toBeVisible();
     await expect(await ticketDetails.getStatus(TicketStatus.rejected)).toBeVisible();
   });
 });
