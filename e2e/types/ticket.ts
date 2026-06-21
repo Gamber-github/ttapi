@@ -20,10 +20,10 @@ export enum ApiErrorCode {
   validationError = "VALIDATION_ERROR",
   statusTransitionError = "STATUS_TRANSITION_ERROR",
   noteAdditionNotAllowed = "NOTE_ADDITION_NOT_ALLOWED",
+  serviceNotFound = "SERVICE_NOT_FOUND",
   troubleTicketNotFound = "TROUBLE_TICKET_NOT_FOUND",
-  notFound = "NOT_FOUND",
+  unauthorized = "UNAUTHORIZED",
   forbidden = "FORBIDDEN",
-  internalError = "INTERNAL_ERROR",
 }
 
 export interface ApiTicketNote {

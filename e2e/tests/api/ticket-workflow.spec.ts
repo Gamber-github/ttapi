@@ -101,4 +101,5 @@ test.describe("Ticket workflow", () => {
     // Act & Assert
     await assertIdempotentCreation(api, uniqueExternalId(), serviceId, serviceId);
   });
+
 });
