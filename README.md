@@ -208,6 +208,45 @@ psql -h localhost -U postgres -d rest_db
 
 ---
 
+## Testy Playwright (E2E)
+
+Testy działają względem lokalnego środowiska Docker Compose — upewnij się że wszystkie kontenery są aktywne (patrz sekcja [Uruchomienie](#uruchomienie)).
+
+### Instalacja zależności
+
+```bash
+npm install
+npx playwright install chromium
+```
+
+### Uruchomienie testów
+
+```bash
+# Wszystkie testy
+npm test
+
+# Tylko testy API
+npm run test:api
+
+# Tylko testy UI
+npm run test:ui
+
+# Konkretny plik
+npx playwright test e2e/tests/api/ticket-workflow.spec.ts --project=api
+
+# Konkretny test po nazwie
+npx playwright test --project=api -g "STATUS_TRANSITION_ERROR"
+
+# Raport HTML po wykonaniu
+npm run report
+```
+
+Przed każdą sesją testową Playwright wykonuje `global-setup`, który loguje użytkowników `alpha`, `beta`, `gamma` przez Keycloak i zapisuje tokeny JWT do plików `.auth/{tenant}.json`. Pliki generowane są automatycznie.
+
+Szczegółowa dokumentacja testów: [TESTING.md](TESTING.md)
+
+---
+
 ## Zmienne środowiskowe
 
 Domyślne wartości zdefiniowane są w pliku `.env`. Możesz je nadpisać eksportując zmienne przed uruchomieniem:
