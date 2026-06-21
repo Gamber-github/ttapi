@@ -3,10 +3,7 @@ import { NewTicketPage } from "../../pages/createTicketPage";
 import { TicketDetailsPage } from "../../pages/ticketDetailsPage";
 import { TicketStatus } from "../../types/ticket";
 import { TicketsPage } from "../../pages/ticketsPage";
-
-// ParityTicketStatusResolver: even serviceId → acknowledged, odd serviceId → rejected
-const EVEN_SERVICE_ID = 100002;
-const ODD_SERVICE_ID = 100001;
+import { validServiceId, rejectedServiceId } from "../../helpers/api";
 
 test.describe("Notes on active tickets", () => {
   test("Note can be added to an acknowledged ticket and appears in the notes list", async ({
@@ -19,7 +16,7 @@ test.describe("Notes on active tickets", () => {
 
     await newTicketPage.goTo();
     const createdTicket = await newTicketPage.createTicket({
-      serviceId: EVEN_SERVICE_ID,
+      serviceId: validServiceId(),
       description: "Ticket for add-note test",
     });
 
@@ -43,7 +40,7 @@ test.describe("Notes on active tickets", () => {
 
     await newTicketPage.goTo();
     const createdTicket = await newTicketPage.createTicket({
-      serviceId: EVEN_SERVICE_ID,
+      serviceId: validServiceId(),
       description: "Ticket for multiple notes test",
     });
 
@@ -67,7 +64,7 @@ test.describe("Notes blocked on inactive tickets", () => {
 
     await newTicketPage.goTo();
     const createdTicket = await newTicketPage.createTicket({
-      serviceId: ODD_SERVICE_ID,
+      serviceId: rejectedServiceId(),
       description: "Ticket expected to be rejected",
     });
 
@@ -87,7 +84,7 @@ test.describe("Notes blocked on inactive tickets", () => {
 
     await newTicketPage.goTo();
     const createdTicket = await newTicketPage.createTicket({
-      serviceId: EVEN_SERVICE_ID,
+      serviceId: validServiceId(),
       description: "Ticket to be closed before note test",
     });
 
@@ -140,7 +137,7 @@ test.describe("Ticket close action", () => {
 
     await newTicketPage.goTo();
     const createdTicket = await newTicketPage.createTicket({
-      serviceId: EVEN_SERVICE_ID,
+      serviceId: validServiceId(),
       description: "Ticket to be closed for status verification",
     });
 
@@ -162,7 +159,7 @@ test.describe("Ticket close action", () => {
 
     await newTicketPage.goTo();
     const createdTicket = await newTicketPage.createTicket({
-      serviceId: EVEN_SERVICE_ID,
+      serviceId: validServiceId(),
       description: "Ticket to verify system note on close",
     });
 
@@ -184,7 +181,7 @@ test.describe("Ticket close action", () => {
 
     await newTicketPage.goTo();
     const createdTicket = await newTicketPage.createTicket({
-      serviceId: EVEN_SERVICE_ID,
+      serviceId: validServiceId(),
       description: "Ticket to verify close button visibility",
     });
 
@@ -203,7 +200,7 @@ test.describe("Ticket close action", () => {
 
     await newTicketPage.goTo();
     const createdTicket = await newTicketPage.createTicket({
-      serviceId: ODD_SERVICE_ID,
+      serviceId: rejectedServiceId(),
       description: "Rejected ticket should not show close button",
     });
 
@@ -224,7 +221,7 @@ test.describe("Ticket close action", () => {
 
     await newTicketPage.goTo();
     const createdTicket = await newTicketPage.createTicket({
-      serviceId: EVEN_SERVICE_ID,
+      serviceId: validServiceId(),
       description: "Ticket to verify close button disappears after closing",
     });
 

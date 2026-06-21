@@ -2,9 +2,7 @@ import { test, expect } from "@playwright/test";
 import { NewTicketPage } from "../../pages/createTicketPage";
 import { TicketsPage } from "../../pages/ticketsPage";
 import { TicketStatus } from "../../types/ticket";
-
-// ParityTicketStatusResolver: even serviceId → acknowledged
-const EVEN_SERVICE_ID = 100002;
+import { validServiceId } from "../../helpers/api";
 
 test.describe("Ticket List", () => {
   test("Should display the ticket list", async ({ page }) => {
@@ -41,7 +39,7 @@ test.describe("Ticket List", () => {
 
     await newTicketPage.goTo();
     const created = await newTicketPage.createTicket({
-      serviceId: EVEN_SERVICE_ID,
+      serviceId: validServiceId(),
       description: "Ticket for status badge visibility test",
     });
 
