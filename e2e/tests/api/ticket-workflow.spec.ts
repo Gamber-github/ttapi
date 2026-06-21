@@ -72,7 +72,7 @@ test.describe("Ticket workflow", () => {
     expect(body.code).toBe(ApiErrorCode.validationError);
   });
 
-  test("should create ticket with rejected status and return 201 when serviceId is outside valid range", async () => {
+  test("should create ticket with rejected status and return 201 when serviceId is odd (parity-based rejection)", async () => {
     // Act
     const response = await api.createTicket({
       externalId: uniqueExternalId(),

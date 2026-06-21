@@ -107,7 +107,7 @@ test.describe("Notes blocked on inactive tickets", () => {
 
     const resolvedRow = ticketListPage.table
       .getByRole("row")
-      .filter({ has: page.locator(".MuiChip-root").filter({ hasText: TicketStatus.resolved }) })
+      .filter({ has: page.getByText(TicketStatus.resolved, { exact: true }) })
       .first();
 
     if ((await resolvedRow.count()) === 0) {

@@ -52,7 +52,7 @@ export class TicketDetailsPage extends BasePage {
   }
 
   async getStatus(expectedStatus: string): Promise<Locator> {
-    return this.page.locator(".MuiChip-root").filter({ hasText: expectedStatus });
+    return this.page.getByText(expectedStatus, { exact: true });
   }
 
   async getSpecificNote(expectedNoteText: string): Promise<Locator> {

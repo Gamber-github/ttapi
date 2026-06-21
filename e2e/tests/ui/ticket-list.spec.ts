@@ -48,6 +48,6 @@ test.describe("Ticket List", () => {
     const ticketRow = ticketListPage.getTicketRow(created.externalId!, created.serviceId!);
 
     // ASSERT
-    await expect(ticketRow.locator(".MuiChip-root").filter({ hasText: TicketStatus.acknowledged })).toBeVisible();
+    await expect(ticketRow.getByText(TicketStatus.acknowledged, { exact: true })).toBeVisible();
   });
 });
