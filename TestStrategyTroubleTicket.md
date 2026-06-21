@@ -113,7 +113,7 @@ Poniższe scenariusze stanowią bazę do implementacji testów automatycznych i 
 - **TS-02:** Walidacja blokady utworzenia zgłoszenia w przypadku przesłania nieprawidłowego identyfikatora usługi (wartość `serviceId` poza zakresem 100001 – 100030) z oczekiwanym kodem błędu `SERVICE_NOT_FOUND`.
 - **TS-03:** Weryfikacja mechanizmu idempotentności podczas próby ponownego wysłania zgłoszenia z identyczną parą (`tenantId`, `externalId`), kończąca się zwróceniem kodu `HTTP 200` oraz instancji istniejącego zasobu.
 - **TS-04:** Walidacja odrzucenia próby utworzenia nowego zgłoszenia z niedozwolonym statusem początkowym (innym niż `new`) i sprawdzenie obsługi kodu błędu `VALIDATION_ERROR`.
-- **TS-05:** Weryfikacja poprawnego przejścia statusu zgłoszenia ze stanu `acknowledged` do stanu `inProgress` za pomocą metody `PATCH`.
+- **TS-05:** Walidacja odrzucenia żądania `PATCH` z niedozwoloną wartością statusu (np. `inProgress`) – endpoint przyjmuje wyłącznie `closed`, więc przesłanie innej wartości powinno skutkować kodem `HTTP 400` i kodem błędu `VALIDATION_ERROR`.
 - **TS-06:** Walidacja negatywnej ścieżki zmiany statusu – próba przejścia bezpośrednio ze statusu `new` do statusu `resolved` i weryfikacja obsługi kodu błędu `STATUS_TRANSITION_ERROR`.
 - **TS-07:** Weryfikacja możliwości zamknięcia zgłoszenia przez klienta API ze statusu `inProgress` do statusu docelowego `closed`.
 - **TS-08:** Walidacja blokady zamknięcia zgłoszenia bezpośrednio ze statusów końcowych/systemowych (`resolved`, `rejected`) i weryfikacja obsługi kodu błędu `STATUS_TRANSITION_ERROR`.
