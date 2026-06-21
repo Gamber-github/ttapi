@@ -34,7 +34,7 @@ test.describe("Ticket creation process", () => {
       expect(await ticketDetailsPage.getServiceID()).toBe(createdTicketData.serviceId);
       expect(await ticketDetailsPage.getDescription()).toBe(createdTicketData.description);
 
-      const noteLocator = await ticketDetailsPage.getSpecificNote(createdTicketData.initialNote!);
+      const noteLocator = ticketDetailsPage.getSpecificNote(createdTicketData.initialNote!);
       await expect(noteLocator).toBeVisible();
     });
 
@@ -96,6 +96,6 @@ test.describe("Ticket creation validation", () => {
 
     // ASSERT
     await expect(ticketDetails.externalIdHeading(createdTicket.externalId!)).toBeVisible();
-    await expect(await ticketDetails.getStatus(TicketStatus.rejected)).toBeVisible();
+    await expect(ticketDetails.getStatus(TicketStatus.rejected)).toBeVisible();
   });
 });

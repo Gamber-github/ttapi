@@ -72,7 +72,7 @@ test.describe("Notes blocked on inactive tickets", () => {
     await ticketDetailsPage.goTo(createdTicket.externalId!);
 
     // ASSERT
-    await expect(await ticketDetailsPage.getStatus(TicketStatus.rejected)).toBeVisible();
+    await expect(ticketDetailsPage.getStatus(TicketStatus.rejected)).toBeVisible();
     await expect(ticketDetailsPage.noteInput).not.toBeVisible();
     await expect(ticketDetailsPage.saveNoteButton).not.toBeVisible();
   });
@@ -92,7 +92,7 @@ test.describe("Notes blocked on inactive tickets", () => {
     await ticketDetailsPage.closeTicket();
 
     // ASSERT
-    await expect(await ticketDetailsPage.getStatus(TicketStatus.closed)).toBeVisible();
+    await expect(ticketDetailsPage.getStatus(TicketStatus.closed)).toBeVisible();
     await expect(ticketDetailsPage.noteInput).not.toBeVisible();
     await expect(ticketDetailsPage.saveNoteButton).not.toBeVisible();
   });
@@ -122,7 +122,7 @@ test.describe("Notes blocked on inactive tickets", () => {
     await expect(ticketDetailsPage.externalIdHeading(ticketId)).toBeVisible();
 
     // ASSERT
-    await expect(await ticketDetailsPage.getStatus(TicketStatus.resolved)).toBeVisible();
+    await expect(ticketDetailsPage.getStatus(TicketStatus.resolved)).toBeVisible();
     await expect(ticketDetailsPage.noteInput).not.toBeVisible();
     await expect(ticketDetailsPage.saveNoteButton).not.toBeVisible();
   });
@@ -144,11 +144,11 @@ test.describe("Ticket close action", () => {
 
     // ACT
     await ticketDetailsPage.goTo(createdTicket.externalId!);
-    await expect(await ticketDetailsPage.getStatus(TicketStatus.acknowledged)).toBeVisible();
+    await expect(ticketDetailsPage.getStatus(TicketStatus.acknowledged)).toBeVisible();
     await ticketDetailsPage.closeTicket();
 
     // ASSERT
-    await expect(await ticketDetailsPage.getStatus(TicketStatus.closed)).toBeVisible();
+    await expect(ticketDetailsPage.getStatus(TicketStatus.closed)).toBeVisible();
   });
 
   test("Closing a ticket automatically adds a status-change system note", async ({
@@ -190,7 +190,7 @@ test.describe("Ticket close action", () => {
     await ticketDetailsPage.goTo(createdTicket.externalId!);
 
     // ASSERT
-    await expect(await ticketDetailsPage.getStatus(TicketStatus.acknowledged)).toBeVisible();
+    await expect(ticketDetailsPage.getStatus(TicketStatus.acknowledged)).toBeVisible();
     await expect(ticketDetailsPage.closeButton).toBeVisible();
   });
 
@@ -209,7 +209,7 @@ test.describe("Ticket close action", () => {
     await ticketDetailsPage.goTo(createdTicket.externalId!);
 
     // ASSERT
-    await expect(await ticketDetailsPage.getStatus(TicketStatus.rejected)).toBeVisible();
+    await expect(ticketDetailsPage.getStatus(TicketStatus.rejected)).toBeVisible();
     await expect(ticketDetailsPage.closeButton).not.toBeVisible();
   });
 
@@ -231,7 +231,7 @@ test.describe("Ticket close action", () => {
     await ticketDetailsPage.closeTicket();
 
     // ASSERT
-    await expect(await ticketDetailsPage.getStatus(TicketStatus.closed)).toBeVisible();
+    await expect(ticketDetailsPage.getStatus(TicketStatus.closed)).toBeVisible();
     await expect(ticketDetailsPage.closeButton).not.toBeVisible();
   });
 
