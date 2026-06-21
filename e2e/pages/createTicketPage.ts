@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import BasePage from "./basePage";
-import { VALID_SERVICE_ID_MIN, VALID_SERVICE_ID_MAX } from "../../playwright.config";
+import { validServiceId } from "../helpers/api";
 
 export interface NewTicketData {
   externalId?: string;
@@ -47,7 +47,7 @@ export class NewTicketPage extends BasePage {
   }
 
   generateValidServiceId(): number {
-    return Math.floor(Math.random() * (VALID_SERVICE_ID_MAX - VALID_SERVICE_ID_MIN + 1)) + VALID_SERVICE_ID_MIN;
+    return validServiceId();
   }
 
   async createTicket(data: NewTicketData): Promise<NewTicketData> {

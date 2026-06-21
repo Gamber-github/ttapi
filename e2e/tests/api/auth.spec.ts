@@ -5,7 +5,7 @@ import { API_BASE_URL } from "../../../playwright.config";
 
 test.describe("Authorization", () => {
   test("should return 401 when Authorization header is missing", async ({ request }) => {
-    // ACT
+    //ACT
     const response = await request.get(`${API_BASE_URL}/api/v1/troubleTicket`);
 
     // ASSERT
@@ -15,8 +15,10 @@ test.describe("Authorization", () => {
   });
 
   test("should return 401 when token is invalid", async ({ request }) => {
-    // ACT
+    // ARRANGE
     const api = createApiClient(request, "alpha");
+
+    // ACT
     const response = await api.listTickets({ Authorization: "Bearer invalid.token.xyz" });
 
     // ASSERT

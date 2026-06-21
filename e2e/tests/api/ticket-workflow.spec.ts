@@ -27,10 +27,10 @@ async function assertIdempotentCreation(
     description: "Different description",
     status: ApiTicketStatus.new,
   });
-  const secondBody = (await secondResponse.json()) as ApiTicketResponse;
 
   // Assert
   expect(secondResponse.status()).toBe(200);
+  const secondBody = (await secondResponse.json()) as ApiTicketResponse;
   expect(secondBody.serviceId).toBe(firstBody.serviceId);
   expect(secondBody.description).toBe(firstBody.description);
   expect([ApiTicketStatus.new, ApiTicketStatus.acknowledged]).toContain(secondBody.status);
@@ -65,6 +65,7 @@ test.describe("Ticket workflow", () => {
       externalId: uniqueExternalId(),
       serviceId: undefined as any,
       description: "Invalid ticket",
+      status: ApiTicketStatus.new,
     });
     const body = (await response.json()) as ApiErrorResponse;
 
@@ -101,5 +102,4 @@ test.describe("Ticket workflow", () => {
     // Act & Assert
     await assertIdempotentCreation(api, uniqueExternalId(), serviceId, serviceId);
   });
-
 });

@@ -2,12 +2,13 @@ import { APIRequestContext } from '@playwright/test';
 import { API_BASE_URL, VALID_SERVICE_ID_MIN, VALID_SERVICE_ID_MAX } from '../../playwright.config';
 import { bearerHeader } from './auth';
 import type { TenantName } from '../../playwright.config';
+import { ApiTicketStatus } from '../types/ticket';
 
 export interface CreateTicketPayload {
   externalId: string;
   serviceId: number;
   description?: string;
-  status?: string;
+  status: ApiTicketStatus;
 }
 
 export interface AddNotePayload {
@@ -15,7 +16,7 @@ export interface AddNotePayload {
 }
 
 export interface PatchTicketPayload {
-  status: string;
+  status: ApiTicketStatus;
 }
 
 export function createApiClient(
