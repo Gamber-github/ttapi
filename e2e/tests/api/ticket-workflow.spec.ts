@@ -1,8 +1,6 @@
 import { expect, test } from "@playwright/test";
-import { createApiClient, rejectedServiceId, uniqueExternalId, validServiceId } from "../../helpers/api";
+import { ApiClient, createApiClient, rejectedServiceId, uniqueExternalId, validServiceId } from "../../helpers/api";
 import { ApiErrorCode, ApiTicketStatus, ApiTicketResponse, ApiErrorResponse } from "../../types/ticket";
-
-type ApiClient = ReturnType<typeof createApiClient>;
 
 async function assertIdempotentCreation(
   api: ApiClient,

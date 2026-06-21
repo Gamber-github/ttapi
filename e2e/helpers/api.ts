@@ -2,7 +2,7 @@ import { APIRequestContext } from '@playwright/test';
 import { API_BASE_URL, VALID_SERVICE_ID_MIN, VALID_SERVICE_ID_MAX } from '../../playwright.config';
 import { bearerHeader } from './auth';
 import type { TenantName } from '../../playwright.config';
-import { ApiTicketStatus } from '../types/ticket';
+import { ApiTicketStatus, ApiTicketResponse } from '../types/ticket';
 
 export interface CreateTicketPayload {
   externalId: string;
@@ -18,6 +18,8 @@ export interface AddNotePayload {
 export interface PatchTicketPayload {
   status: ApiTicketStatus;
 }
+
+export type ApiClient = ReturnType<typeof createApiClient>;
 
 export function createApiClient(
   request: APIRequestContext,
@@ -86,4 +88,13 @@ export function rejectedServiceId(): number {
   const min = VALID_SERVICE_ID_MIN % 2 !== 0 ? VALID_SERVICE_ID_MIN : VALID_SERVICE_ID_MIN + 1;
   const oddCount = Math.floor((VALID_SERVICE_ID_MAX - min) / 2) + 1;
   return min + Math.floor(Math.random() * oddCount) * 2;
+}
+
+export async function findTicketByStatus(
+  api: ApiClient,
+  status: ApiTicketStatus,
+): Promise<ApiTicketResponse | undefined> {
+  const listResponse = await api.listTickets();
+  const tickets = (await listResponse.json()) as ApiTicketResponse[];
+  return tickets.find((t) => t.status === status);
 }
