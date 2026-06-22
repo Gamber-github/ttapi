@@ -1,79 +1,79 @@
 import { defineConfig, devices } from '@playwright/test';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+export const API_BASE_URL = process.env.BASE_URL_API || 'http://localhost:8080';
+export const UI_BASE_URL = process.env.BASE_URL_UI || 'http://localhost:3000';
+export const KC_BASE_URL = process.env.KC_URL || 'http://localhost:8180';
+export const KC_REALM = process.env.KC_REALM || 'ttapi';
+export const KC_CLIENT_ID = process.env.KC_CLIENT_ID || 'ttapi-client';
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
+export const KC_TOKEN_URL = `${KC_BASE_URL}/realms/${KC_REALM}/protocol/openid-connect/token`;
+
+export const USERS = {
+  alpha: { username: 'alpha', password: 'Test1234!', tenant: 'alpha' },
+  beta: { username: 'beta', password: 'Test1234!', tenant: 'beta' },
+  gamma: { username: 'gamma', password: 'Test1234!', tenant: 'gamma' },
+};
+
+export type TenantName = 'alpha' | 'beta' | 'gamma';
+
+export const AUTH_STATE_DIR = '.auth';
+export const authStatePath = (tenant: TenantName) =>
+  `${AUTH_STATE_DIR}/${tenant}.json`;
+
+export const VALID_SERVICE_ID_MIN = 100001;
+export const VALID_SERVICE_ID_MAX = 100030;
+
 export default defineConfig({
-  testDir: './tests',
-  /* Run tests in files in parallel */
+  testDir: './e2e/tests',
+  workers: process.env.CI ? 2 : 4,
   fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  use: {
-    /* Base URL to use in actions like `await page.goto('')`. */
-    // baseURL: 'http://localhost:3000',
+  globalSetup: 'e2e/helpers/global-setup.ts',
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
-  },
-
-  /* Configure projects for major browsers */
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
+  reporter: [
+    ['list'],
+    ['html', { open: 'never', outputFolder: 'playwright-report' }],
   ],
 
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+  use: {
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'off',
+    extraHTTPHeaders: {
+      Accept: 'application/json',
+    },
+  },
+
+  projects: [
+    {
+      name: 'api',
+      testMatch: '**/tests/api/**/*.spec.ts',
+      use: {
+        baseURL: API_BASE_URL,
+        storageState: authStatePath('alpha'),
+        extraHTTPHeaders: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      },
+    },
+    {
+      name: 'ui-chrome',
+      testMatch: '**/tests/ui/**/*.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: UI_BASE_URL,
+        storageState: authStatePath('alpha'),
+        video: 'on-first-retry',
+        viewport: { width: 1440, height: 900 },
+      },
+    },
+  ],
+
+  outputDir: 'test-results',
+  timeout: 30000,
+  expect: {
+    timeout: 5000,
+  },
 });
